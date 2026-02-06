@@ -10,14 +10,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install KraftKit
-        run: curl -sSfL https://get.kraftkit.sh | sh
+      # This action is the "Fix" for the 'command not found' error.
+      # It installs kraft AND makes it available in the PATH for the next step.
+      - name: Setup KraftKit
+        uses: unikraft/kraftkit@stable
 
       - name: Build and Deploy to KraftCloud
         env:
           UKC_TOKEN: ${{ secrets.UKC_TOKEN }}
           UKC_METRO: fra
-        # We use '--as dockerfile' and target the Dockerfile directly to ignore all other configs
+        # We explicitly tell it to use the Dockerfile and nothing else.
         run: |
           kraft cloud deploy \
             --build \
