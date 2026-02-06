@@ -1,0 +1,29 @@
+name: Deploy Unikernel
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache Cargo dependencies so your CI doesn't take 5 mins every time
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install KraftKit
+        run: curl -sSfL https://get.kraftkit.sh | sh
+
+      - name: Build and Deploy to KraftCloud
+        env:
+          UKC_TOKEN: ${{ secrets.UKC_TOKEN }}
+          UKC_METRO: fra
+        run: kraft cloud deploy --project . --wait 10s
