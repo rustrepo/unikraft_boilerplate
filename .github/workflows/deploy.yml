@@ -17,10 +17,13 @@ jobs:
         env:
           UKC_TOKEN: ${{ secrets.UKC_TOKEN }}
           UKC_METRO: fra
+        # The key change is adding --as dockerfile and --plat/--arch
         run: |
           kraft cloud deploy \
             --build \
-            --runtime rust-1-82 \
+            --as dockerfile \
+            --plat kraftcloud \
+            --arch x86_64 \
+            --name hello-unikraft \
             --project . \
-            --wait 10s \
-            --scale-to-zero on
+            --wait 10s
