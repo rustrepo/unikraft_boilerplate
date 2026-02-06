@@ -7,23 +7,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # Cache Cargo dependencies so your CI doesn't take 5 mins every time
-      - name: Cache Rust
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Install KraftKit
-        run: curl -sSfL https://get.kraftkit.sh | sh
+      # Use the official action instead of manual curl
+      - name: Setup KraftKit
+        uses: unikraft/kraftkit@stable
 
       - name: Build and Deploy to KraftCloud
         env:
           UKC_TOKEN: ${{ secrets.UKC_TOKEN }}
           UKC_METRO: fra
+        # This now knows exactly where 'kraft' is located
         run: kraft cloud deploy --project . --wait 10s
