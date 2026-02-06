@@ -1,5 +1,6 @@
-# Use the full image (not slim) to ensure all build tools are present
-FROM rust:1.82 AS builder
+# This image is ~600MB smaller than the standard one
+FROM rust:1.82-alpine AS builder
+RUN apk add --no-network --no-cache musl-dev gcc
 
 # Install the musl target
 RUN rustup target add x86_64-unknown-linux-musl
