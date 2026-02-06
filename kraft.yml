@@ -1,3 +1,0 @@
-spec: v0.6
-name: hello-unikraft
-runtime: base/rust:1.82

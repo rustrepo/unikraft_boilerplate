@@ -1,7 +1,0 @@
-spec: v0.6
-name: hello-rust
-runtime: base:latest
-# This tells Unikraft to use your Dockerfile to build the "hard drive"
-rootfs: ./Dockerfile
-# This tells Unikraft EXACTLY what file to run inside that hard drive
-cmd: ["/main"]
